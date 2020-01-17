@@ -1,0 +1,14 @@
+
+
+mvn io.quarkus:quarkus-maven-plugin:1.0.0.CR1:create     -DprojectGroupId=org.acme     -DprojectArtifactId=fruit-taster     -DclassName="org.acme.quickstart.GreetingResource"     -Dextensions="spring-data-jpa,spring-web,spring-di,jdbc-postgres"     -Dpath="/hello"
+
+sudo podman run --name postgres-database -e POSTGRES_USER=sa -e POSTGRES_PASSWORD=sa -e POSTGRES_DB=fruits -p 5432:5432 postgres:10.5
+mvn clean package quarkus:dev
+sudo podman exec -it b81c31291db3 /bin/bash
+su - postgres
+psql fruits sa
+
+curl -X POST -s http://localhost:8080/fruits/name/apple/color/red | jq
+curl -s http://localhost:8080/taster | jq
+curl -s http://localhost:8080/hello | jq
+ps -o pid,rss,command -p $(pgrep -f runner)
